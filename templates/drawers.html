@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 60%;
+            margin: 0 auto;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>MAC address</th>
+                <th>Drawer 1 value</th>
+                <th>Drawer 2 value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for drawer in drawers %}
+            <tr>
+                <td>{{ drawer.MACaddr }}</td>
+                <td>{{ drawer.drawer1 }}</td>
+                <td>{{ drawer.drawer2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
