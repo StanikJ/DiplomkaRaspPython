@@ -3,6 +3,7 @@ import threading
 import time
 import json
 import RPi.GPIO as GPIO
+import logging
 
 serverMacAddress = "00:1A:7D:DA:71:13"
 serverPortNumber = 4
@@ -23,6 +24,17 @@ GPIO.setup(drawer2Pin, GPIO.OUT)
 GPIO.output(drawer1Pin, pin1State)
 GPIO.output(drawer2Pin, pin2State)
 
+# Create logger object
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.ERROR)
+# Create a file handler
+fh = logging.FileHandler('mylog.txt')
+fh.setLevel(logging.ERROR)
+# Create a formatter for the log messages
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+fh.setFormatter(formatter)
+# Add the file handler to the logger
+logger.addHandler(fh)
 
 
 def send_message():
@@ -86,3 +98,5 @@ while True:
             print('Connection error: ', e)
             print('Retrying in 5 seconds...')
             time.sleep(5)
+            # sam si vytvori mylog.txt file ale mozno mu bude treba pridat permissions na write 
+            logger.exception(e)
