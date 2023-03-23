@@ -1,0 +1,66 @@
+SERVER
+import bluetooth
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+
+# Generate RSA key pair
+key = RSA.generate(2048)
+
+# Create a Bluetooth socket and listen for incoming connections
+server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+server_sock.bind(("", bluetooth.PORT_ANY))
+server_sock.listen(1)
+
+# Get the Bluetooth address of the server
+server_address = server_sock.getsockname()[0]
+
+# Display the server address and public key
+print(f"Server address: {server_address}")
+print(f"Public key: {key.publickey().export_key()}")
+
+# Wait for a client to connect
+client_sock, client_address = server_sock.accept()
+print(f"Accepted connection from {client_address}")
+
+# Create a cipher using the client's public key
+client_key = RSA.import_key(client_sock.recv(1024))
+cipher = PKCS1_OAEP.new(client_key)
+
+# Receive encrypted data from the client and decrypt it
+encrypted_data = client_sock.recv(1024)
+decrypted_data = cipher.decrypt(encrypted_data)
+
+# Display the decrypted data
+print(f"Received encrypted data: {encrypted_data}")
+print(f"Decrypted data: {decrypted_data}")
+
+
+KLIENT
+import bluetooth
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+
+# Get the Bluetooth address of the server
+server_address = "00:11:22:33:44:55"
+
+# Create a Bluetooth socket and connect to the server
+client_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+client_sock.connect((server_address, bluetooth.PORT_ANY))
+
+# Generate RSA key pair
+key = RSA.generate(2048)
+
+# Send the client's public key to the server
+client_sock.send(key.publickey().export_key())
+
+# Create a cipher using the server's public key
+server_key = RSA.import_key(client_sock.recv(1024))
+cipher = PKCS1_OAEP.new(server_key)
+
+# Encrypt some data and send it to the server
+data = b"Hello, world!"
+encrypted_data = cipher.encrypt(data)
+client_sock.send(encrypted_data)
+
+# Close the connection
+client_sock.close()
