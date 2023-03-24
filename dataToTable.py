@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -23,6 +23,17 @@ class Data(db.Model):
 def drawers():
     drawers = Data.query.all()
     return render_template('drawers.html', drawers=drawers)
+
+@app.route('/details/<int:id>', methods=['GET', 'POST'])
+def details(id):
+    drawer = Data.query.get(id)
+    if request.method == 'POST':
+        drawer.drawer1 = request.form['drawer1']
+        drawer.drawer2 = request.form['drawer2']
+        db.session.commit()
+        flash('Drawer values updated successfully!', 'success')
+        return redirect(url_for('drawers'))
+    return render_template('details.html', drawer=drawer)
 
 if __name__ == '__main__':
     with app.app_context():

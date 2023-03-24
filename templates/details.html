@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Data</title>
+    <title>Details</title>
     <style>
         table {
             border-collapse: collapse;
@@ -17,20 +17,17 @@
             background-color: #f2f2f2;
             font-weight: bold;
         }
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        .button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 8px 16px;
+        form {
+            margin-top: 20px;
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            margin: 4px 2px;
-            cursor: pointer;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="submit"] {
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -41,19 +38,26 @@
                 <th>MAC address</th>
                 <th>Drawer 1 value</th>
                 <th>Drawer 2 value</th>
-                <th>Details</th>
             </tr>
         </thead>
         <tbody>
-            {% for drawer in drawers %}
             <tr>
                 <td>{{ drawer.MACaddr }}</td>
                 <td>{{ drawer.drawer1 }}</td>
                 <td>{{ drawer.drawer2 }}</td>
-                <td><a href="{{ url_for('details', id=drawer.id) }}" class="button">Details</a></td>
             </tr>
-            {% endfor %}
         </tbody>
     </table>
+    <div class="container">
+        <h1>Odosli data pre DB</h1>
+        <form method="POST">
+            <label for="drawer1">Drawer 1:</label>
+            <input type="number" id="drawer1" name="drawer1" value="{{ drawer.drawer1 }}" min="0" max="1" required>
+            <label for="drawer2">Drawer 2:</label>
+            <input type="number" id="drawer2" name="drawer2" value="{{ drawer.drawer2 }}" min="0" max="1" required>
+            <input type="hidden" name="id" value="{{ drawer.id }}">
+            <input type="submit" value="Update">
+        </form>
+    </div>
 </body>
 </html>
