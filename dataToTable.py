@@ -28,12 +28,20 @@ def drawers():
 def details(id):
     drawer = Data.query.get(id)
     if request.method == 'POST':
-        drawer.drawer1 = request.form['drawer1']
-        drawer.drawer2 = request.form['drawer2']
+        drawer.drawer1 = convert_to_number(request.form.get('drawer1'))
+        drawer.drawer2 = convert_to_number(request.form.get('drawer2'))
         db.session.commit()
         flash('Drawer values updated successfully!', 'success')
         return redirect(url_for('drawers'))
     return render_template('details.html', drawer=drawer)
+
+def convert_to_number(word):
+    if word == 'Zapnut':
+        return 1
+    elif word == 'Vypnut':
+        return 0
+    else:
+        return int(word)
 
 if __name__ == '__main__':
     with app.app_context():
