@@ -81,10 +81,12 @@ while True:
             receive_thread.join()
             print('Connection error: ', error)
             print('Retrying in 5 seconds...')
+            logger.exception(error)
             time.sleep(5)
         else:
             print('Connection error: ', error)
             print('Retrying in 5 seconds...')
+            logger.exception(error)
             time.sleep(5)
     except Exception as e:
         if connectionGrantedFlag == True:
@@ -93,10 +95,11 @@ while True:
             receive_thread.join()
             print('Connection error: ', e)
             print('Retrying in 5 seconds...')
+            logger.exception(e)
             time.sleep(5)
         else:
             print('Connection error: ', e)
             print('Retrying in 5 seconds...')
+            logger.exception(e)
             time.sleep(5)
             # sam si vytvori mylog.txt file ale mozno mu bude treba pridat permissions na write 
-            logger.exception(e)
