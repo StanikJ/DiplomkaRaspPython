@@ -60,6 +60,15 @@
 			<label for="password">Password:</label>
 			<input type="password" name="password" id="password" required>
 			<button type="submit">Log In</button>
+			{% with messages = get_flashed_messages() %}
+  			{% if messages %}
+    			<ul class="flashes">
+    		
+      				<li>{{ messages[-1] }}</li>
+    		
+    			</ul>
+  			{% endif %}
+			{% endwith %}
 		</form>
 	</div>
 </body>

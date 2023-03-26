@@ -39,7 +39,8 @@ def post_login():
     if username == env_username and password == env_password:
         return redirect(url_for('drawers'))
     else:
-        return render_template('loginN.html', message='Invalid email or password')
+        flash('Invalid username or password')
+        return render_template('loginN.html')
 
 @app.route('/drawers')
 def drawers():
@@ -57,7 +58,8 @@ def post_details(id):
     drawer.drawer1 = convert_to_number(request.form.get('drawer1'))
     drawer.drawer2 = convert_to_number(request.form.get('drawer2'))
     db.session.commit()
-    flash('Drawer values updated successfully!', 'success')
+    drawerMac = Data.query.filter_by(id=id).first().MACaddr
+    flash(f"Zasuvka s MAC adresou: |{drawerMac}|, bola uspesne updatnuta!")
     return redirect(url_for('drawers'))
 
 def convert_to_number(word):
