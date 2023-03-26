@@ -50,7 +50,7 @@
                 <td>{{ drawer.MACaddr }}</td>
                 <td>{{ drawer.drawer1 }}</td>
                 <td>{{ drawer.drawer2 }}</td>
-                <td><a href="{{ url_for('details', id=drawer.id) }}" class="button">Details</a></td>
+                <td><a href="{{ url_for('get_details', id=drawer.id) }}" class="button">Details</a></td>
             </tr>
             {% endfor %}
         </tbody>

@@ -22,19 +22,24 @@ class Data(db.Model):
         self.drawer1 = drawer1
         self.drawer2 = drawer2
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        env_username = os.getenv('global_user_name')
-        env_password = os.getenv('global_user_password')
-        if username == env_username and password == env_password:
-            return render_template('dashboard.html')
-        else:
-            return render_template('loginN.html', message='Invalid email or password')
+@app.route("/")
+def home():
+    return render_template("indexN.html")
+
+@app.route('/login', methods=['GET'])
+def get_login():
+    return render_template('loginN.html')
+
+@app.route('/login', methods=['POST'])
+def post_login():
+    username = request.form['username']
+    password = request.form['password']
+    env_username = os.getenv('global_user_name')
+    env_password = os.getenv('global_user_password')
+    if username == env_username and password == env_password:
+        return redirect(url_for('drawers'))
     else:
-        return render_template('loginN.html')
+        return render_template('loginN.html', message='Invalid email or password')
 
 @app.route('/drawers')
 def drawers():
