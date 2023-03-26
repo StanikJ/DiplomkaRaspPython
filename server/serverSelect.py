@@ -25,11 +25,13 @@ while True:
             client_sock, client_info = server_sock.accept()
             clients.append({'sock': client_sock, 'info': client_info, 'mac': None})
             print(f"New client connected: {client_info}")
+
         # If client socket is readable, receive message and process
         else:
             client = [client for client in clients if client['sock'] == sock][0]
             data = sock.recv(1024).decode()
             print(f"Received message from {client['info']}: {data}")
+            
             # Parse JSON message and extract MAC address and message content
             try:
                 message = json.loads(data)
@@ -46,6 +48,6 @@ while True:
 # Close all sockets and exit program
 for client in clients:
     client['sock'].close()
-    
+
 server_sock.close()
 print("Server shutdown")
