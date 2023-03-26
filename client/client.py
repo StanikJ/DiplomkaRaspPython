@@ -5,101 +5,76 @@ import json
 import RPi.GPIO as GPIO
 import logging
 
-serverMacAddress = "00:1A:7D:DA:71:13"
-serverPortNumber = 4
-myMacAddress = "AA:AA:AA:AA:AA:AA"
+from Config import Config
+from DrawerPinEnum import DrawerPinEnum
+from DrawerPinStateEnum import DrawerPinStateEnum
+from DrawersService import DrawersService
+from MessageModel import MessageModel
 
-validationMessage = "thisisasecretkeytovalidation"
-drawer1Pin = 12
-drawer2Pin = 18
-pin1State = 0
-pin2State = 0
-size = 1024
+config = Config()
+drawerService = DrawersService([DrawerPinEnum.FIRST.value,
+                                DrawerPinEnum.SECOND.value
+                                ])
+# pom = MessageModel.from_sock('{"macAddress": "AA:AA:AA:AA:AA:AA", "drawers": [0, 1, 1]}')
+# print(pom)
+# print(pom.mac_address)
+# print(pom.drawers[0])
+#
+# print(pom.__dict__)
+# message = MessageModel(config.my_mac_address,
+#                        [DrawerPinStateEnum.ZERO, DrawerPinStateEnum.ZERO, DrawerPinStateEnum.ONE])
+# print(message)
+# print(message.to_json())
+#
+# exit(1)
+bluetoothService = BluetoothService(Config.server_mac_address, Config.server_port, Config.message_size)
 
-connectionGrantedFlag = False
+logging.basicConfig(filename='logs.log', format='%(asctime)s - %(levelname)s - %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S',
+                    level=logging.DEBUG)
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(drawer1Pin, GPIO.OUT)
-GPIO.setup(drawer2Pin, GPIO.OUT)
-GPIO.output(drawer1Pin, pin1State)
-GPIO.output(drawer2Pin, pin2State)
+logging.debug('This is a debug message')
 
-# Create logger object
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.ERROR)
-# Create a file handler
-fh = logging.FileHandler('mylog.txt')
-fh.setLevel(logging.ERROR)
-# Create a formatter for the log messages
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-fh.setFormatter(formatter)
-# Add the file handler to the logger
-logger.addHandler(fh)
+isRunning: bool = True
+isConnected: bool = False
+send_state_thread = None
 
+def send_state():
+    while isRunning and isConnected:
+        # TODO mozno bude treba doplnit try catch
+        drawer_state = drawerService.get_drawers_state()
+        message = MessageModel(config.my_mac_address, drawer_state)
+        bluetoothService.send_data(message.to_json())
+        time.sleep(config.sending_timeout)
 
-def send_message():
-    while True:
-        dataForServer = {
-            "MACaddr":myMacAddress,
-            "drawer1":pin1State,
-            "drawer2":pin2State
-        }
-        dataForServerJson = json.dumps(dataForServer)
-        client_sock.send(dataForServerJson.encode())
-        time.sleep(20)
-
-def recieve_message():
-    while True:
-        dataForClientJson = client_sock.recv(size)
-        dataForClient = json.loads(dataForClientJson.decode())
-        if "drawer1" in dataForClient:
-            pin1State = dataForClient["drawer1"]
-            GPIO.output(drawer1Pin, pin1State)
-        if "drawer2" in dataForClient:
-            pin2State = dataForClient["drawer2"]
-            GPIO.output(drawer2Pin, pin2State)
-
-while True:
+while isRunning:
     try:
-        client_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-        client_sock.connect((serverMacAddress, serverPortNumber))
+        if isConnected is False:
+            bluetoothService.connect()
+            # prehodit print na logger debug
+            print('Connecting to server!')
+            if bluetoothService.auth_connection(Config.secret_key_message):
+                raise Exception("Failed validation secret message.")
+
+        # prehodit print na logger debug
         print('Connected to server!')
-        client_sock.send(validationMessage.encode())
-        validationResponse = client_sock.recv(size)
-        validateTrim = validationResponse.decode()
-        if validateTrim == "Connection granted.":
-            connectionGrantedFlag = True
-            send_thread = threading.Thread(target=send_message)
-            receive_thread = threading.Thread(target=recieve_message)
-            send_thread.start()
-            receive_thread.start()
+        isConnected = True
+
+        send_state_thread = threading.Thread(target=send_state)
+        send_state_thread.start()
+
+        data = MessageModel.from_sock(bluetoothService.read_data())
+        drawerService.set_drawers_sate(data.drawers)
 
     except bluetooth.btcommon.BluetoothError as error:
-        if connectionGrantedFlag == True:
-            connectionGrantedFlag = False
-            send_thread.join()
-            receive_thread.join()
-            print('Connection error: ', error)
-            print('Retrying in 5 seconds...')
-            logger.exception(error)
-            time.sleep(5)
-        else:
-            print('Connection error: ', error)
-            print('Retrying in 5 seconds...')
-            logger.exception(error)
-            time.sleep(5)
-    except Exception as e:
-        if connectionGrantedFlag == True:
-            connectionGrantedFlag = False
-            send_thread.join()
-            receive_thread.join()
-            print('Connection error: ', e)
-            print('Retrying in 5 seconds...')
-            logger.exception(e)
-            time.sleep(5)
-        else:
-            print('Connection error: ', e)
-            print('Retrying in 5 seconds...')
-            logger.exception(e)
-            time.sleep(5)
-            # sam si vytvori mylog.txt file ale mozno mu bude treba pridat permissions na write 
+        print('Connection error: ', error)
+        logging.exception(error)
+
+    except Exception as error:
+        print('Connection error: ', error)
+        logging.exception(error)
+    finally:
+        send_state_thread.join()
+        print('Retrying in 5 seconds...')
+        isConnected = False
+        time.sleep(5)
