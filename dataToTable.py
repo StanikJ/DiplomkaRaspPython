@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import os
@@ -10,6 +10,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///exampleForD.sqlite3'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = 'secret_key'
 db = SQLAlchemy(app)
+
+app.secret_key = 'your_secret_key'
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_COOKIE_NAME'] = 'your_session_cookie_name'
+app.config['PERMANENT_SESSION_LIFETIME'] = 1800 #1800 je 30 minutes in seconds
 
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,6 +43,7 @@ def post_login():
     env_password = os.getenv('global_user_password')
     if username == env_username and password == env_password:
         flash("Boli ste uspesne prihlaseny.", category='popup')
+        session['logged_in'] = True
         return redirect(url_for('drawers'))
     else:
         flash("Nespravne prihlasovacie udaje.", category='popup')
@@ -45,23 +51,41 @@ def post_login():
 
 @app.route('/drawers')
 def drawers():
-    drawers = Data.query.all()
-    return render_template('drawers.html', drawers=drawers)
+    if session.get('logged_in'):
+        drawers = Data.query.all()
+        return render_template('drawers.html', drawers=drawers)
+    else:
+        flash("Boli ste odhlaseny. Musite sa znova prihlasit.", category='popup')
+        return redirect(url_for('get_login'))
 
 @app.route('/details/<int:id>', methods=['GET'])
 def get_details(id):
-    drawer = Data.query.get(id)
-    return render_template('details.html', drawer=drawer)
+    if session.get('logged_in'):
+        drawer = Data.query.get(id)
+        return render_template('details.html', drawer=drawer)
+    else: 
+        flash("Boli ste odhlaseny. Musite sa znova prihlasit.", category='popup')
+        return redirect(url_for('get_login'))
 
 @app.route('/details/<int:id>', methods=['POST'])
 def post_details(id):
-    drawer = Data.query.get(id)
-    drawer.drawer1 = convert_to_number(request.form.get('drawer1'))
-    drawer.drawer2 = convert_to_number(request.form.get('drawer2'))
-    db.session.commit()
-    drawerMac = Data.query.filter_by(id=id).first().MACaddr
-    flash(f"Zasuvka s MAC adresou: |{drawerMac}|, bola uspesne updatnuta!", category='popup')
-    return redirect(url_for('drawers'))
+    if session.get('logged_in'):
+        drawer = Data.query.get(id)
+        drawer.drawer1 = convert_to_number(request.form.get('drawer1'))
+        drawer.drawer2 = convert_to_number(request.form.get('drawer2'))
+        db.session.commit()
+        drawerMac = Data.query.filter_by(id=id).first().MACaddr
+        flash(f"Zasuvka s MAC adresou: |{drawerMac}|, bola uspesne updatnuta!", category='popup')
+        return redirect(url_for('drawers'))
+    else: 
+        flash("Boli ste odhlaseny. Musite sa znova prihlasit.", category='popup')
+        return redirect(url_for('get_login'))
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    flash("Boli ste uspesne odhlaseny.", category='popup')
+    return redirect(url_for('get_login'))
 
 def convert_to_number(word):
     if word == 'Zapnut':
