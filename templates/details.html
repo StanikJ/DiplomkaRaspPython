@@ -45,6 +45,51 @@
         background-color: #d32f2f;
         cursor: pointer;
         }
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 30px;
+			background-color: #f1f1f1;
+		}
+		h1 {
+			text-align: center;
+			font-size: 36px;
+			margin-bottom: 10px;
+		}
+		form {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			background-color: #fff;
+			border-radius: 5px;
+			padding: 20px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+		form label, form select, form input[type="submit"] {
+			margin: 10px;
+			font-size: 18px;
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+		form label {
+			font-weight: bold;
+		}
+		form select {
+			background-color: #f1f1f1;
+		}
+		form input[type="submit"] {
+			background-color: #4CAF50;
+			color: #fff;
+			cursor: pointer;
+			transition: background-color 0.3s;
+		}
+		form input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
     </style>
 </head>
 <body>
@@ -88,7 +133,8 @@
                 {% endif %}
             </select>
             <input type="hidden" name="id" value="{{ drawer.id }}">
-            <input type="submit" value="Update">
+            <input type="submit" name="action" value="Update">
+            <input type="submit" name="action" value="Vypnut celu zasuvku">
         </form>
     </div>
     <a href="{{ url_for('logout') }}" class="button1">Logout</a>
