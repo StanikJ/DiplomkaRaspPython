@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Login Page</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<style>
 		body {
 			font-family: Arial, sans-serif;
@@ -49,6 +50,16 @@
 		button[type="submit"]:hover {
 			background-color: #3e8e41;
 		}
+		#popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #3e8e41;
+            padding: 20px;
+            display: none;
+        }
 	</style>
 </head>
 <body>
@@ -60,16 +71,22 @@
 			<label for="password">Password:</label>
 			<input type="password" name="password" id="password" required>
 			<button type="submit">Log In</button>
-			{% with messages = get_flashed_messages() %}
-  			{% if messages %}
-    			<ul class="flashes">
-    		
-      				<li>{{ messages[-1] }}</li>
-    		
-    			</ul>
-  			{% endif %}
-			{% endwith %}
 		</form>
-	</div>
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+		{% for category, message in messages %}
+		{% if category == 'popup' %}
+		<div id="popup">
+			<p>{{ message }}</p>
+		</div>
+		<script>
+			$(document).ready(function(){
+				$('#popup').fadeIn().delay(1000).fadeOut();
+			});
+		</script>
+		{% endif %}
+		{% endfor %}
+		{% endif %}
+		{% endwith %}
 </body>
 </html>

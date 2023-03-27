@@ -37,9 +37,10 @@ def post_login():
     env_username = os.getenv('global_user_name')
     env_password = os.getenv('global_user_password')
     if username == env_username and password == env_password:
+        flash("Boli ste uspesne prihlaseny.", category='popup')
         return redirect(url_for('drawers'))
     else:
-        flash('Invalid username or password')
+        flash("Nespravne prihlasovacie udaje.", category='popup')
         return render_template('loginN.html')
 
 @app.route('/drawers')
@@ -59,7 +60,7 @@ def post_details(id):
     drawer.drawer2 = convert_to_number(request.form.get('drawer2'))
     db.session.commit()
     drawerMac = Data.query.filter_by(id=id).first().MACaddr
-    flash(f"Zasuvka s MAC adresou: |{drawerMac}|, bola uspesne updatnuta!")
+    flash(f"Zasuvka s MAC adresou: |{drawerMac}|, bola uspesne updatnuta!", category='popup')
     return redirect(url_for('drawers'))
 
 def convert_to_number(word):
