@@ -154,6 +154,11 @@
           "tags": [
             "Drawer details"
           ],
+          "security": [
+            {
+              "sessionCookieAuth": []
+            }
+          ],
           "description": "Update the details for a specific drawer.",
           "produces": [
             "application/json"
@@ -212,6 +217,11 @@
           "summary": "Logs out the user",
           "tags": [
             "Logout"
+          ],
+          "security": [
+            {
+              "sessionCookieAuth": []
+            }
           ],
           "responses": {
             "200": {
