@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import os
+from flask_swagger_ui import get_swaggerui_blueprint
 
 load_dotenv()
 
@@ -15,6 +16,18 @@ app.secret_key = 'your_secret_key'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_COOKIE_NAME'] = 'your_session_cookie_name'
 app.config['PERMANENT_SESSION_LIFETIME'] = 1800 #1800 je 30 minutes in seconds
+
+
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGER_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name' : "Smart drawers"
+    }
+)
+app.register_blueprint(SWAGGER_BLUEPRINT, url_prefix = SWAGGER_URL)
 
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)

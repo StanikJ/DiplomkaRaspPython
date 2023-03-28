@@ -1,0 +1,224 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "My Flask API",
+      "description": "API for managing smart drawers",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:5000"
+      }
+    ],
+    "paths": {
+      "/": {
+        "get": {
+          "summary": "Render home page",
+          "tags": [
+            "Homepage"
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "text/html": {}
+              }
+            }
+          }
+        }
+      },
+      "/login": {
+        "get": {
+          "summary": "Render login page",
+          "tags": [
+            "Login"
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "text/html": {}
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Authenticate user",
+          "tags": [
+            "Login"
+          ],
+          "requestBody": {
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "username",
+                    "password"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "302": {
+              "description": "Redirect to /drawers",
+              "headers": {
+                "Location": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "Failed login attempt",
+              "content": {
+                "text/html": {}
+              }
+            }
+          }
+        }
+      },
+      "/drawers": {
+        "get": {
+          "summary": "Render drawers page",
+          "tags": [
+            "Drawers"
+          ],
+          "security": [
+            {
+              "sessionCookieAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "text/html": {}
+              }
+            },
+            "302": {
+              "description": "Redirect to /login",
+              "headers": {
+                "Location": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/details/{id}": {
+        "get": {
+          "summary": "Render page with info about drawer with {id}",
+          "tags": [
+            "Drawer details"
+          ],
+          "security": [
+            {
+              "sessionCookieAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "text/html": {}
+              }
+            },
+            "302": {
+              "description": "Redirect to /login",
+              "headers": {
+                "Location": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Update values of drawer with {id}",
+          "tags": [
+            "Drawer details"
+          ],
+          "description": "Update the details for a specific drawer.",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID of the drawer to update",
+              "required": true,
+              "type": "integer",
+              "format": "int32"
+            },
+            {
+              "name": "action",
+              "in": "formData",
+              "description": "Action to perform",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "drawer1",
+              "in": "formData",
+              "description": "Value to update drawer 1",
+              "required": false,
+              "type": "number",
+              "format": "float"
+            },
+            {
+              "name": "drawer2",
+              "in": "formData",
+              "description": "Value to update drawer 2",
+              "required": false,
+              "type": "number",
+              "format": "float"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success"
+            },
+            "302": {
+              "description": "Redirect"
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/logout": {
+        "post": {
+          "summary": "Logs out the user",
+          "tags": [
+            "Logout"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful logout"
+            }
+          }
+        }
+      }
+  }
+}
