@@ -1,9 +1,10 @@
 from DrawerPinStateEnum import DrawerPinStateEnum
 import json
+from typing import List
 
 
 class MessageModel:
-    def __init__(self, pa_mac_address: str, pa_drawers: [DrawerPinStateEnum]) -> None:
+    def __init__(self, pa_mac_address: str, pa_drawers: List[DrawerPinStateEnum]) -> None:
         self._macAddress = pa_mac_address
         self._drawers = pa_drawers
 
@@ -12,7 +13,7 @@ class MessageModel:
         return self._macAddress
 
     @property
-    def drawers(self) -> [DrawerPinStateEnum]:
+    def drawers(self) -> List[DrawerPinStateEnum]:
         return self._drawers
 
     @mac_address.setter
@@ -20,13 +21,13 @@ class MessageModel:
         self._macAddress = pa_mac_address
 
     @drawers.setter
-    def drawers(self, pa_drawers: [DrawerPinStateEnum]):
+    def drawers(self, pa_drawers: List[DrawerPinStateEnum]):
         self._drawers = pa_drawers
 
     @staticmethod
     def from_sock(pa_message: str):
         data_dict = json.loads(pa_message)
-        drawers_state: [DrawerPinStateEnum] = []
+        drawers_state: List[DrawerPinStateEnum] = []
         for drawer in data_dict['drawers']:
             drawers_state.append(drawer)
         return MessageModel(data_dict['macAddress'], drawers_state)

@@ -1,0 +1,53 @@
+{% extends '../views/layout.html' %}
+{% block title %}Details{% endblock %}
+{% set stylesheet = url_for('public', filename='details.css') %}
+{% include 'flash.html' %}
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>MAC address</th>
+                <th>Drawer 1 value</th>
+                <th>Drawer 2 value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ drawer.MACaddr }}</td>
+                <td>{{ drawer.drawer1 }}</td>
+                <td>{{ drawer.drawer2 }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="container">
+        <h1>Odosli data pre DB</h1>
+        <form method="POST" action="/details/{{ drawer.id }}">
+            <label for="drawer1">Drawer 1:</label>
+            <select id="drawer1" name="drawer1" required>
+                {% if drawer.drawer1 == 0 %}
+                    <option value="0" selected>Vypnuta</option>
+                    <option value="1">Zapnut</option>
+                {% else %}
+                    <option value="0">Vypnut</option>
+                    <option value="1" selected>Zapnuta</option>
+                {% endif %}
+            </select>
+            <label for="drawer2">Drawer 2:</label>
+            <select id="drawer2" name="drawer2" required>
+                {% if drawer.drawer2 == 0 %}
+                    <option value="0" selected>Vypnuta</option>
+                    <option value="1">Zapnut</option>
+                {% else %}
+                    <option value="0">Vypnut</option>
+                    <option value="1" selected>Zapnuta</option>
+                {% endif %}
+            </select>
+            <input type="hidden" name="id" value="{{ drawer.id }}">
+            <button type="submit">Update</button>
+            <form method="PUT" action="/details/{{ drawer.id }}">
+                <button type="submit">Vypni vsetky zasuvky</button>
+            </form>
+        </form>
+    </div>
+    <a href="{{ url_for('logout') }}" class="button1">Logout</a>
+{% endblock %}

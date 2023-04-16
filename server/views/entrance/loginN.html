@@ -1,0 +1,14 @@
+% extends '../views/layout.html' %}
+{% block title %}Login page{% endblock %}
+{% set stylesheet = url_for('public', filename='login.css') %}
+{% include 'flash.html' %}
+{% block content %}
+	<h1>Login Page</h1>
+	<form method="post" action="#">
+		<label for="username">Username:</label>
+		<input type="text" name="username" id="username" required>
+		<label for="password">Password:</label>
+		<input type="password" name="password" id="password" required>
+		<button type="submit">Log In</button>
+	</form>
+{% endblock %}

@@ -10,6 +10,7 @@ from DrawerPinEnum import DrawerPinEnum
 from DrawerPinStateEnum import DrawerPinStateEnum
 from DrawersService import DrawersService
 from MessageModel import MessageModel
+from BluetoothService import BluetoothService
 
 config = Config()
 drawerService = DrawersService([DrawerPinEnum.FIRST.value,
@@ -65,6 +66,9 @@ while isRunning:
 
         data = MessageModel.from_sock(bluetoothService.read_data())
         drawerService.set_drawers_sate(data.drawers)
+        drawer_state = drawerService.get_drawers_state()
+        message = MessageModel(config.my_mac_address, drawer_state)
+        bluetoothService.send_data(message.to_json())
 
     except bluetooth.btcommon.BluetoothError as error:
         print('Connection error: ', error)

@@ -1,0 +1,26 @@
+{% extends '../views/layout.html' %}
+{% block title %}Drawers{% endblock %}
+{% set stylesheet = url_for('public', filename='drawers.css') %}
+{% include 'flash.html' %}
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>MAC address</th>
+                <th>Drawer 1 value</th>
+                <th>Drawer 2 value</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for drawer in drawers %}
+            <tr>
+                <td>{{ drawer.MACaddr }}</td>
+                <td>{{ drawer.drawer1 }}</td>
+                <td>{{ drawer.drawer2 }}</td>
+                <td><a href="{{ url_for('get_details', id=drawer.id) }}" class="button">Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
