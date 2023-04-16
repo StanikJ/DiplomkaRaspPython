@@ -1,8 +1,7 @@
 from flask import Blueprint, session, redirect, render_template, url_for, request, flash
 import os
 
-blueprint = Blueprint('entrance', __name__,
-                        template_folder='../views/entrance')
+blueprint = Blueprint('entrance', __name__)
 
 @blueprint.route('/login', methods=['GET'])
 def get_login():
@@ -17,7 +16,7 @@ def post_login():
     if username == env_username and password == env_password:
         flash("Boli ste uspesne prihlaseny.", category='popup')
         session['logged_in'] = True
-        return redirect(url_for('drawers'))
+        return redirect(url_for('drawers.drawers'))
     else:
         flash("Nespravne prihlasovacie udaje.", category='popup')
         return render_template('loginN.html')
@@ -26,4 +25,4 @@ def post_login():
 def logout():
     session.pop('logged_in', None)
     flash("Boli ste uspesne odhlaseny.", category='popup')
-    return redirect(url_for('get_login'))
+    return redirect(url_for('entrance.get_login'))

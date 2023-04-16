@@ -3,13 +3,16 @@ import threading
 
 from Config import Config
 from BluetoothService import BluetoothService
+from MessageModel import MessageModel
 
 config = Config()
-bluetoothService = BluetoothService(Config.server_mac_address, Config.server_port, Config.message_size, Config.clients_queue)
+bluetoothService = BluetoothService(config.server_mac_address, config.server_port, config.message_size, config.clients_queue)
 
 def handle_client(client_sock, client_info):
     try:
-        print()
+        data_from_client = bluetoothService.read_data()
+        message = MessageModel.from_sock(data_from_client)
+        
     except:
         print()
         #ak sa komunikacia potvrdi az vo vlakne tak potom tu bude socket.declain a musi tu vlakno zabit same seba
@@ -21,6 +24,9 @@ def handle_client(client_sock, client_info):
             #print("Removed client with MAC address", mac_address)
 
 def send_message(mac_address, message):
+    print()
+
+def recieve_message(mac_address, message):
     print()
 
 bluetoothService.bind()

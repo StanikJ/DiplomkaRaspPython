@@ -11,7 +11,7 @@ from routers.drawer_router import blueprint as drawer_router
 
 load_dotenv()
 
-app = Flask(__name__, static_url_path='/public', static_folder='/public')
+app = Flask(__name__, static_url_path='/public', static_folder='public', template_folder='views')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///exampleForD.sqlite3'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = 'secret_key'

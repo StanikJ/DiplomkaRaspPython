@@ -1,6 +1,6 @@
-{% extends '../views/layout.html' %}
+{% extends 'layout.html' %}
 {% block title %}Drawers{% endblock %}
-{% set stylesheet = url_for('public', filename='drawers.css') %}
+{% set stylesheet = url_for('static', filename='drawers.css') %}
 {% include 'flash.html' %}
 {% block content %}
     <table>
@@ -18,7 +18,7 @@
                 <td>{{ drawer.MACaddr }}</td>
                 <td>{{ drawer.drawer1 }}</td>
                 <td>{{ drawer.drawer2 }}</td>
-                <td><a href="{{ url_for('get_details', id=drawer.id) }}" class="button">Details</a></td>
+                <td><a href="{{ url_for('drawer_detail.get_details', id=drawer.id) }}" class="button">Details</a></td>
             </tr>
             {% endfor %}
         </tbody>

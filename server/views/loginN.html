@@ -1,6 +1,6 @@
-% extends '../views/layout.html' %}
+{% extends 'layout.html' %}
 {% block title %}Login page{% endblock %}
-{% set stylesheet = url_for('public', filename='login.css') %}
+{% set stylesheet = url_for('static', filename='login.css') %}
 {% include 'flash.html' %}
 {% block content %}
 	<h1>Login Page</h1>

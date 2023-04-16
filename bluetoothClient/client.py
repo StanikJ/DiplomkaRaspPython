@@ -28,7 +28,7 @@ drawerService = DrawersService([DrawerPinEnum.FIRST.value,
 # print(message.to_json())
 #
 # exit(1)
-bluetoothService = BluetoothService(Config.server_mac_address, Config.server_port, Config.message_size)
+bluetoothService = BluetoothService(config.server_mac_address, config.server_port, config.message_size)
 
 logging.basicConfig(filename='logs.log', format='%(asctime)s - %(levelname)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
@@ -54,7 +54,7 @@ while isRunning:
             bluetoothService.connect()
             # prehodit print na logger debug
             print('Connecting to server!')
-            if bluetoothService.auth_connection(Config.secret_key_message):
+            if bluetoothService.auth_connection(config.secret_key_message):
                 raise Exception("Failed validation secret message.")
 
         # prehodit print na logger debug

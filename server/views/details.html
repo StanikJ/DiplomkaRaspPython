@@ -1,6 +1,6 @@
-{% extends '../views/layout.html' %}
+{% extends 'layout.html' %}
 {% block title %}Details{% endblock %}
-{% set stylesheet = url_for('public', filename='details.css') %}
+{% set stylesheet = url_for('static', filename='details.css') %}
 {% include 'flash.html' %}
 {% block content %}
     <table>
@@ -49,5 +49,4 @@
             </form>
         </form>
     </div>
-    <a href="{{ url_for('logout') }}" class="button1">Logout</a>
 {% endblock %}
