@@ -5,6 +5,7 @@ class Config:
         self._server_port = 4
         self._secret_key_message = "thisisasecretkeytovalidation"
         self._message_size = 1024
+        self._clients_queue = 5
 
     @property
     def server_mac_address(self) -> str:
@@ -20,4 +21,8 @@ class Config:
 
     @property
     def message_size(self) -> int:
+        return self.message_size
+
+    @property
+    def clients_queue(self) -> int:
         return self.message_size

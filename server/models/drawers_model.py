@@ -5,6 +5,7 @@ class DrawersModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     MACaddr = db.Column(db.String(80), unique=True, nullable=False)
     drawer1 = db.Column(db.Integer, nullable=False)
+    drawer2 = db.Column(db.Integer, nullable=False)
     updatedAt = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     createdAt = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -13,7 +14,7 @@ class DrawersModel(db.Model):
         self.drawer1 = drawer1
         self.drawer2 = drawer2
 
-    def update_timestamp(self):
+    def update_timestamp(self):     # vyquerujes si data napr podla ID data=queryid, data.update_timestamp, db.session.commit()
         self.updatedAt = datetime.utcnow()
 
     def is_record_old(self):

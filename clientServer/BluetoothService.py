@@ -17,6 +17,9 @@ class BluetoothService:
     def listen(self):
         self._sock.listen(self._pa_clients_queue)
 
+    def accept(self):
+        self._sock.accept()
+
     def send_data(self, pa_message: str):
         self._sock.send(pa_message.encode())
         pass
