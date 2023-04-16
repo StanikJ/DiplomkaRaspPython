@@ -18,9 +18,25 @@
                 <td>{{ drawer.MACaddr }}</td>
                 <td>{{ drawer.drawer1 }}</td>
                 <td>{{ drawer.drawer2 }}</td>
-                <td><a href="{{ url_for('drawer_detail.get_details', id=drawer.id) }}" class="button">Details</a></td>
+                <td><a href="{{ url_for('details.get_details', id=drawer.id) }}" class="button">Details</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'popup' %}
+    <div id="popup">
+        <p>{{ message }}</p>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('#popup').fadeIn().delay(3000).fadeOut();
+        });
+    </script>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 {% endblock %}

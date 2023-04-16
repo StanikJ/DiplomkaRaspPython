@@ -1,7 +1,6 @@
 {% extends 'layout.html' %}
 {% block title %}Details{% endblock %}
 {% set stylesheet = url_for('static', filename='details.css') %}
-{% include 'flash.html' %}
 {% block content %}
     <table>
         <thead>
@@ -22,31 +21,68 @@
     <div class="container">
         <h1>Odosli data pre DB</h1>
         <form method="POST" action="/details/{{ drawer.id }}">
-            <label for="drawer1">Drawer 1:</label>
+
+            <label for="drawer1" class="switch">Drawer 1:</label>
+                <input type="checkbox" name="drawer1" {% if drawer.drawer1 == 1 %}checked{% endif %}>
+                <span class="slider"></span>
+            </label>
+            <label for="drawer2" class="switch">Drawer 2:</label>
+                <input type="checkbox" name="drawer2" {% if drawer.drawer2 == 1 %}checked{% endif %}>
+                <span class="slider"></span>
+            </label> 
+            <!-- <label for="drawer1">Drawer 1:</label>
             <select id="drawer1" name="drawer1" required>
-                {% if drawer.drawer1 == 0 %}
-                    <option value="0" selected>Vypnuta</option>
-                    <option value="1">Zapnut</option>
-                {% else %}
-                    <option value="0">Vypnut</option>
-                    <option value="1" selected>Zapnuta</option>
-                {% endif %}
+                <label class="switch">
+                    <input type="checkbox" name="drawer1" {% if drawer.drawer1 == 1 %}checked{% endif %}>
+                    <span class="slider"></span>
+                </label>
             </select>
             <label for="drawer2">Drawer 2:</label>
             <select id="drawer2" name="drawer2" required>
-                {% if drawer.drawer2 == 0 %}
-                    <option value="0" selected>Vypnuta</option>
-                    <option value="1">Zapnut</option>
-                {% else %}
-                    <option value="0">Vypnut</option>
-                    <option value="1" selected>Zapnuta</option>
-                {% endif %}
-            </select>
+                <label class="switch">
+                    <input type="checkbox" name="drawer1" {% if drawer.drawer2 == 1 %}checked{% endif %}>
+                    <span class="slider"></span>
+                  </label> 
+            </select> -->
             <input type="hidden" name="id" value="{{ drawer.id }}">
             <button type="submit">Update</button>
             <form method="PUT" action="/details/{{ drawer.id }}">
                 <button type="submit">Vypni vsetky zasuvky</button>
             </form>
+            <!-- <label class="switch">
+                {% if drawer.drawer1 == 0 %}
+                  <input type="checkbox" name="drawer1" value="1">
+                {% else %}
+                  <input type="checkbox" name="drawer1" value="1" checked>
+                {% endif %}
+                <span class="slider round"></span>
+              </label>
+              <label class="switch">
+                <input type="checkbox" name="drawer1" {% if drawer.drawer1 == 1 %}checked{% endif %}>
+                <span class="slider"></span>
+              </label>
+              <label class="switch">
+                <input type="checkbox" name="drawer1" {% if drawer.drawer2 == 1 %}checked{% endif %}>
+                <span class="slider"></span>
+              </label> 
+            
+              {% if drawer.drawer1 == 0 %}
+                    <option value="0" selected>Vypnuta</option>
+                    <option value="1">Zapnut</option>
+                {% else %}
+                    <option value="0">Vypnut</option>
+                    <option value="1" selected>Zapnuta</option>
+                {% endif %}
+            
+              {% if drawer.drawer2 == 0 %}
+                    <option value="0" selected>Vypnuta</option>
+                    <option value="1">Zapnut</option>
+                {% else %}
+                    <option value="0">Vypnut</option>
+                    <option value="1" selected>Zapnuta</option>
+                {% endif %}
+            
+            -->
         </form>
     </div>
 {% endblock %}
