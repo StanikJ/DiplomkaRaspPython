@@ -12,6 +12,13 @@ def handle_client(client_sock, client_info):
         print()
     except:
         print()
+        #ak sa komunikacia potvrdi az vo vlakne tak potom tu bude socket.declain a musi tu vlakno zabit same seba
+        #client_sock.close()
+        #print("Connection closed with", client_info)
+        # Remove the client from the dictionary when it disconnects
+        #mac_address = client_dict.pop(client_info[0], None)
+        #if mac_address is not None:
+            #print("Removed client with MAC address", mac_address)
 
 def send_message(mac_address, message):
     print()
