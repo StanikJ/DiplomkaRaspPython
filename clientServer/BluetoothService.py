@@ -29,5 +29,6 @@ class BluetoothService:
         return msg.decode()
 
     def auth_connection(self, pa_message: str) -> bool:
-        self.send_data(pa_message)
-        return self.read_data() != self._server_connection_validation_message
+        if self.read_data() == pa_message:
+            self.send_data(self._server_connection_validation_message)
+            return True

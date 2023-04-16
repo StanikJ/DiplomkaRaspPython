@@ -32,8 +32,11 @@ client_dict = {}
 while True:
     #potvrd klienta
     client_sock, client_info = bluetoothService.accept()
-    # bud vymen spravy a ak je to ok potvrd ho alebo to riesit v threade priamo
-    client_dict[client_info[0]] = client_sock # store the MAC address in the dictionary macaddress = client socket podla toho budem komunikovat
-    thread = threading.Thread(target=handle_client, args=(client_sock, client_info))
-    thread.daemon = True
-    thread.start()
+    if bluetoothService.auth_connection(config.secret_key_message):
+        # bud vymen spravy a ak je to ok potvrd ho alebo to riesit v threade priamo
+        client_dict[client_info[0]] = client_sock # store the MAC address in the dictionary macaddress = client socket podla toho budem komunikovat
+        thread = threading.Thread(target=handle_client, args=(client_sock, client_info))
+        thread.daemon = True
+        thread.start()
+    else:
+        client_sock.close()
