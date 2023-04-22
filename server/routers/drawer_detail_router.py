@@ -4,6 +4,7 @@ from helpers.checkbox_helper import checkbox_to_db_value
 from models.drawers_model import DrawersModel
 from helpers.database import db
 from decorators import auth_decorator
+from helpers.bluetooth_helper import bluetooth_service_helper
 import time
 
 blueprint = Blueprint('details', __name__)
@@ -21,17 +22,14 @@ def post_details(id):
         new_drawer1 = checkbox_to_db_value(request.form.get('drawer1'))
         new_drawer2 = checkbox_to_db_value(request.form.get('drawer2'))
         if drawer.drawer1 == new_drawer1 and drawer.drawer2 == new_drawer2:
-            #drawerMac = DrawersModel.query.filter_by(id=id).first().MACaddr
             flash(f"Na zasuvke s MAC adresou: |{drawer.MACaddr}|, nebolo nic updatnute!", category='popup')
             return redirect(url_for('drawers.drawers'))
         else:
             drawer.drawer1 = checkbox_to_db_value(request.form.get('drawer1'))
             drawer.drawer2 = checkbox_to_db_value(request.form.get('drawer2'))
-            db.session.commit()
-            #drawerMac = DrawersModel.query.filter_by(id=id).first().MACaddr
-            #id_dictionary[drawerMac] = True # dynamicka premenna a ked ju odosleme na klienta tak sa nadstavi na False
+            bluetooth_service_helper.send_data_to_client([drawer.drawer1, drawer.drawer2], drawer.Macaddr)
+            #db.session.commit()
             flash(f"Zasuvka s MAC adresou: |{drawer.MACaddr}|, bola uspesne updatnuta!", category='popup')
-            #time.sleep(3) # pauza pre poslanie dat, prijatie od klienta a nacitanie db z drawers asi musi byt v klientovi pri prijati aj poslanie aby toto fungovalo
             return redirect(url_for('drawers.drawers'))
 
 @blueprint.route('/details/<int:id>/all', methods=['POST'])
@@ -40,9 +38,7 @@ def put_details(id):
     drawer = DrawersModel.query.get(id)
     drawer.drawer1 = 0
     drawer.drawer2 = 0
-    db.session.commit()
-    #drawerMac = DrawersModel.query.filter_by(id=id).first().MACaddr
-    #id_dictionary[drawerMac] = True
+    #db.session.commit()
+    bluetooth_service_helper.send_data_to_client([drawer.drawer1, drawer.drawer2], drawer.Macaddr)
     flash(f"Zasuvka s MAC adresou: |{drawer.MACaddr}|, bola uplne vypnuta!", category='popup')
-    #time.sleep(3)  # Pause for 5 seconds
     return redirect(url_for('drawers.drawers'))

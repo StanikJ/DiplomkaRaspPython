@@ -33,7 +33,4 @@ class MessageModel:
         return MessageModel(data_dict['macAddress'], drawers_state)
 
     def to_json(self) -> str:
-        drawers_state = []
-        for drawer in self._drawers:
-            drawers_state.append(drawer.value)
-        return json.dumps({'macAddress': self._macAddress, 'drawers': drawers_state})
+        return json.dumps({'macAddress': self._macAddress, 'drawers': self._drawers})

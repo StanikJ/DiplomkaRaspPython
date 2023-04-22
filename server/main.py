@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 import os
 from flask_swagger_ui import get_swaggerui_blueprint
 from helpers.database import db
+from services.bluetooth_server_service.Config import Config
+from helpers.bluetooth_helper import start_bluetooth_service
 
 from routers.entrance_router import blueprint as entrance_router
 from routers.root_router import blueprint as root_router
@@ -10,6 +12,7 @@ from routers.drawer_detail_router import blueprint as drawer_detail_router
 from routers.drawer_router import blueprint as drawer_router
 
 load_dotenv()
+config = Config
 
 app = Flask(__name__, static_url_path='/public', static_folder='public', template_folder='views')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///exampleForD.sqlite3'
@@ -43,5 +46,6 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+    start_bluetooth_service(config)
 
 #https://github.com/deveshkharve/flask-middleware
