@@ -1,5 +1,8 @@
+from __future__ import annotations
 from helpers.database import db
 from datetime import datetime, timedelta
+from typing import List
+
 
 class DrawersModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -23,9 +26,10 @@ class DrawersModel(db.Model):
         return now_extract_minute > self.updatedAt
 
     @staticmethod
-    def function_to_check_if_clients_work(self):
-        drawers_model_list = DrawersModel.query().all()
+    def function_to_check_if_clients_work() -> List[DrawersModel]:
+        drawers_model_list = DrawersModel.query.all()
         for drawer_model in drawers_model_list:
             if drawer_model.is_record_old():
                 db.session.delete(drawer_model)
         db.session.commit()
+        return drawers_model_list

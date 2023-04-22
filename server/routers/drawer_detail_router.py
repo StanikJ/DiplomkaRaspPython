@@ -31,10 +31,10 @@ def post_details(id):
             #drawerMac = DrawersModel.query.filter_by(id=id).first().MACaddr
             #id_dictionary[drawerMac] = True # dynamicka premenna a ked ju odosleme na klienta tak sa nadstavi na False
             flash(f"Zasuvka s MAC adresou: |{drawer.MACaddr}|, bola uspesne updatnuta!", category='popup')
-            time.sleep(3) # pauza pre poslanie dat, prijatie od klienta a nacitanie db z drawers asi musi byt v klientovi pri prijati aj poslanie aby toto fungovalo
+            #time.sleep(3) # pauza pre poslanie dat, prijatie od klienta a nacitanie db z drawers asi musi byt v klientovi pri prijati aj poslanie aby toto fungovalo
             return redirect(url_for('drawers.drawers'))
 
-@blueprint.route('/details/<int:id>', methods=['PATCH'])
+@blueprint.route('/details/<int:id>/all', methods=['POST'])
 @auth_decorator.is_authentificate
 def put_details(id):
     drawer = DrawersModel.query.get(id)
@@ -44,5 +44,5 @@ def put_details(id):
     #drawerMac = DrawersModel.query.filter_by(id=id).first().MACaddr
     #id_dictionary[drawerMac] = True
     flash(f"Zasuvka s MAC adresou: |{drawer.MACaddr}|, bola uplne vypnuta!", category='popup')
-    time.sleep(3)  # Pause for 5 seconds
+    #time.sleep(3)  # Pause for 5 seconds
     return redirect(url_for('drawers.drawers'))

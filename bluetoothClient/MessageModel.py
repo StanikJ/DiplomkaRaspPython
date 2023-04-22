@@ -27,9 +27,9 @@ class MessageModel:
     @staticmethod
     def from_sock(pa_message: str):
         data_dict = json.loads(pa_message)
-        drawers_state: List[DrawerPinStateEnum] = []
+        drawers_state: List[DrawerPinStateEnum.value] = []
         for drawer in data_dict['drawers']:
-            drawers_state.append(drawer)
+            drawers_state.append(drawer.value)
         return MessageModel(data_dict['macAddress'], drawers_state)
 
     def to_json(self) -> str:

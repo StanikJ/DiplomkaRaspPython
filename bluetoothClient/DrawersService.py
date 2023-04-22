@@ -7,7 +7,7 @@ class DrawersService:
 
     def __init__(self, pa_drawers_pins: List[int]):
         self._drawers_pins = pa_drawers_pins
-        self._drawers_pins_state: List[DrawerPinStateEnum] = pa_drawers_pins
+        self._drawers_pins_state: List[DrawerPinStateEnum.value] = pa_drawers_pins
         self._default_pin_mode = GPIO.OUT
         self._default_pin_state = DrawerPinStateEnum.ZERO
         self._init_drawers()
@@ -32,7 +32,7 @@ class DrawersService:
         for index, drawer in enumerate(self._drawers_pins):
             # add logger index a pin drawera
             GPIO.output(drawer, pa_drawers_pin_states[index].value)
-            self._drawers_pins_state[index] = pa_drawers_pin_states[index]
+            self._drawers_pins_state[index].value = pa_drawers_pin_states[index].value
 
     def get_drawers_state(self) -> List[DrawerPinStateEnum]:
         return self._drawers_pins_state
