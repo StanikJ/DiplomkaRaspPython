@@ -1,4 +1,4 @@
-import bluetooth 
+#import bluetooth 
 import threading
 
 from MessageModel import MessageModel
@@ -12,7 +12,7 @@ class BluetoothService:
     def __init__(self, pa_config: Config):
         self._mac_address = pa_config.server_mac_address
         self._server_port = pa_config.server_port
-        self._sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+        #self._sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
         self._message_size = pa_config.message_size
         self._server_connection_validation_message = "Connection granted."
         self._pa_clients_queue = pa_config.clients_queue
@@ -27,7 +27,7 @@ class BluetoothService:
     def accept(self):
         self._sock.accept()
 
-    def send_data_to_client(self, pa_drawer_state: List[int], pa_mac_addr: str ):
+    def send_data_to_client(self, pa_drawer_state: List[int], pa_mac_addr: str):
         for key, value in self._client_dict.items():
             if key is pa_mac_addr:
                 client_sock = value

@@ -1,9 +1,9 @@
 class Config:
 
     def __init__(self):
-        self._server_mac_address = "00:1A:7D:DA:71:13"
+        self._server_mac_address = "E4:5F:01:54:77:74"
         self._server_port = 4
-        self._my_mac_address = "AA:AA:AA:AA:AA:AA"
+        self._my_mac_address = "B8:27:EB:64:7A:CF"
         self._secret_key_message = "thisisasecretkeytovalidation"
         self._message_size = 1024
         self._sending_timeout = 20
@@ -26,7 +26,7 @@ class Config:
 
     @property
     def message_size(self) -> int:
-        return self.message_size
+        return self._message_size
 
     @property
     def sending_timeout(self) -> int:

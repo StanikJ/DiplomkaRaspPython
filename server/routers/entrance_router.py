@@ -1,12 +1,13 @@
 from flask import Blueprint, session, redirect, render_template, url_for, request, flash
 import os
+from decorators import auth_decorator
 
 blueprint = Blueprint('entrance', __name__)
 
 @blueprint.route('/login', methods=['GET'])
 def get_login():
-    if session['logged_in'] is True:
-        return redirect(url_for('drawers.drawers'))
+    #if session['logged_in'] is True:
+    #    return redirect(url_for('drawers.drawers'))
     return render_template('loginN.html')
 
 @blueprint.route('/login', methods=['POST'])

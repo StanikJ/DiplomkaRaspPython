@@ -65,10 +65,13 @@ while isRunning:
         send_state_thread.start()
 
         data = MessageModel.from_sock(bluetoothService.read_data())
-        drawerService.set_drawers_sate(data.drawers)
-        drawer_state = drawerService.get_drawers_state()
-        message = MessageModel(config.my_mac_address, drawer_state)
-        bluetoothService.send_data(message.to_json())
+        print("1")
+        print(data.drawers)
+        print("2")
+        drawerService.set_drawers_state(data.drawers)
+        drawer_stateS = drawerService.get_drawers_state()
+        messageS = MessageModel(config.my_mac_address, drawer_stateS)
+        bluetoothService.send_data(messageS.to_json())
 
     except bluetooth.btcommon.BluetoothError as error:
         print('Connection error: ', error)

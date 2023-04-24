@@ -2,13 +2,13 @@
 {% block title %}Login page{% endblock %}
 {% set stylesheet = url_for('static', filename='login.css') %}
 {% block content %}
-	<h1>Login Page</h1>
+	<h1>Login</h1>
 	<form method="post" action="#">
-		<label for="username">Username:</label>
+		<label for="username">Meno:</label>
 		<input type="text" name="username" id="username" required>
-		<label for="password">Password:</label>
+		<label for="password">Heslo:</label>
 		<input type="password" name="password" id="password" required>
-		<button type="submit">Log In</button>
+		<button type="submit">Prihlásiť sa</button>
 	</form>
 	{% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}

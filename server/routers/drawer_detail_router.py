@@ -4,7 +4,7 @@ from helpers.checkbox_helper import checkbox_to_db_value
 from models.drawers_model import DrawersModel
 from helpers.database import db
 from decorators import auth_decorator
-from helpers.bluetooth_helper import bluetooth_service_helper
+#from helpers.bluetooth_helper import bluetooth_service_helper
 import time
 
 blueprint = Blueprint('details', __name__)
@@ -27,8 +27,8 @@ def post_details(id):
         else:
             drawer.drawer1 = checkbox_to_db_value(request.form.get('drawer1'))
             drawer.drawer2 = checkbox_to_db_value(request.form.get('drawer2'))
-            bluetooth_service_helper.send_data_to_client([drawer.drawer1, drawer.drawer2], drawer.Macaddr)
-            #db.session.commit()
+            #bluetooth_service_helper.send_data_to_client([drawer.drawer1, drawer.drawer2], drawer.Macaddr)
+            db.session.commit()
             flash(f"Zasuvka s MAC adresou: |{drawer.MACaddr}|, bola uspesne updatnuta!", category='popup')
             return redirect(url_for('drawers.drawers'))
 
@@ -38,7 +38,7 @@ def put_details(id):
     drawer = DrawersModel.query.get(id)
     drawer.drawer1 = 0
     drawer.drawer2 = 0
-    #db.session.commit()
-    bluetooth_service_helper.send_data_to_client([drawer.drawer1, drawer.drawer2], drawer.Macaddr)
+    db.session.commit()
+    #bluetooth_service_helper.send_data_to_client([drawer.drawer1, drawer.drawer2], drawer.Macaddr)
     flash(f"Zasuvka s MAC adresou: |{drawer.MACaddr}|, bola uplne vypnuta!", category='popup')
     return redirect(url_for('drawers.drawers'))

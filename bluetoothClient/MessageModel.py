@@ -27,13 +27,21 @@ class MessageModel:
     @staticmethod
     def from_sock(pa_message: str):
         data_dict = json.loads(pa_message)
-        drawers_state: List[DrawerPinStateEnum.value] = []
+        drawers_state: List[DrawerPinStateEnum] = []
         for drawer in data_dict['drawers']:
-            drawers_state.append(drawer.value)
+            drawers_state.append(drawer)
+            #if drawer == 1:
+            #    drawers_state.append(DrawerPinStateEnum.ONE.value)
+            #else:
+            #    drawers_state.append(DrawerPinStateEnum.ZERO.value)
         return MessageModel(data_dict['macAddress'], drawers_state)
 
     def to_json(self) -> str:
         drawers_state = []
         for drawer in self._drawers:
-            drawers_state.append(drawer.value)
+            #drawers_state.append(drawer.value)
+            if drawer == DrawerPinStateEnum.ONE.value:
+                drawers_state.append(1)
+            else:
+                drawers_state.append(0)
         return json.dumps({'macAddress': self._macAddress, 'drawers': drawers_state})

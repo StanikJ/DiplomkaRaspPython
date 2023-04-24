@@ -8,9 +8,9 @@ blueprint = Blueprint('drawers', __name__)
 @blueprint.route('/drawers')
 @auth_decorator.is_authentificate
 def drawers():
-        # mac = DrawersModel("Cav Johnny", 0, 1)
-        # db.session.add(mac)
-        # db.session.commit()
+        #mac = DrawersModel("E4:5F:01:54:77:74", 0, 1)
+        #db.session.add(mac)
+        #db.session.commit()
         #drawers = DrawersModel.function_to_check_if_clients_work()
         drawers = DrawersModel.query.all()
         return render_template('drawers.html', drawers=drawers)

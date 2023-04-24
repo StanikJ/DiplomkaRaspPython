@@ -4,7 +4,7 @@ import os
 from flask_swagger_ui import get_swaggerui_blueprint
 from helpers.database import db
 from services.bluetooth_server_service.Config import Config
-from helpers.bluetooth_helper import start_bluetooth_service
+#from helpers.bluetooth_helper import start_bluetooth_service
 
 from routers.entrance_router import blueprint as entrance_router
 from routers.root_router import blueprint as root_router
@@ -46,6 +46,6 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-    start_bluetooth_service(config)
+    #start_bluetooth_service(config)
 
 #https://github.com/deveshkharve/flask-middleware
